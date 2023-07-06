@@ -11,7 +11,7 @@
 clear;clc;close all; warning('on')
 
 % path setup
-addpath(genpath('/Users/yeojin/Documents/MATLAB/fieldtrip-20180613')); % change those two
+addpath(genpath('/Users/yeojin/Documents/MATLAB/fieldtrip-20220104')); % change those two
 addpath(genpath('/Users/yeojin/Desktop/B_scripts/BA_preprocessing/'))
 
 % which data will you be processing? (for now, it's all 1)
@@ -26,14 +26,19 @@ pilotNr     = 2;
 path_parent = '/Users/yeojin/Desktop/E_data/';
 path_dat    = [ path_parent 'EA_raw/' ]; % tailor it to your original path
 path_stim   = [ path_dat 'EAA_pupil/stiminfo_all_20181004.mat' ]; % stimulus information
-path_behav  = [ path_dat 'EAC_behav/pilot_3T_2sess/tmp/' ];
-path_save   = [ path_parent 'EB_cleaned/EBB_pupil/'];
+path_behav  = [ path_dat 'EAC_behav/MRPETpilot/' ];
+path_save   = [ path_parent 'EB_cleaned/EBB_pupil/MRPETpilot/'];
 
 % create file list and VP ID list
-VPs = [2202 2203 2204 2205 2206 2207 2208 2109 2110 2111 2112 2113 2114 2115 2116 2217 2218 2219 2220 2221];
-tag = [1 2; 1 2; 1 2; 1 2; 1 2; 0 2; 1 2; 1 2; 1 2; 1 0; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2];
-d1m = [1 2; 1 0; 1 0; 1 2; 1 2; 1 0; 1 0; 1 2; 1 2; 1 0; 1 0; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2]; % 1=immediate 2=delayed
-d2m = [1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2];
+% VPs = [2202 2203 2204 2205 2206 2207 2208 2109 2110 2111 2112 2113 2114 2115 2116 2217 2218 2219 2220 2221];
+% tag = [1 2; 1 2; 1 2; 1 2; 1 2; 0 2; 1 2; 1 2; 1 2; 1 0; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2];
+% d1m = [1 2; 1 0; 1 0; 1 2; 1 2; 1 0; 1 0; 1 2; 1 2; 1 0; 1 0; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2]; % 1=immediate 2=delayed
+% d2m = [1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2];
+% IDs
+VPs  = [2202 2203 2204 2205 2206 2207 2208 2109 2110 2112 2113 2114 2115 2116 2217 2218 2219 2220 2221 2222 2223 2224 2125 2126 2127 2128 2129 2130 2131 2132 2233 2234 2235 2236 2237 2238 2239 2240 2142 2143 2144 2145 2146 2147 2148 2249 2250];
+days = [1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2];
+d1m  = [1 2; 1 0; 1 2; 1 2; 1 2; 1 0; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 0; 1 2; 1 2; 1 2; 1 2; 1 2]; % 1=immediate 2=delayed
+d2m  = [1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 0; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2; 1 2];
 
 % if sessions == 1
 %     VPs = [2202 2203 2204 2207 2208];
@@ -84,7 +89,7 @@ for i1 = 1:length(VPs)
 end
 
 % script specific variables
-pathdat       = fullfile(path_dat,'EAA_pupil','pilot_3T_2sess');
+pathdat       = fullfile(path_dat,'EAB_pupil','MRPETpilot','ASC');
 pathdatbehav  = fullfile(path_behav,fname_beh);
 
 fprintf('\n Preparation done \n')
@@ -92,7 +97,7 @@ fprintf('\n Preparation done \n')
 
 close all
 
-for vps = 18:length(VPs)
+for vps = 1:length(VPs)
     
     for d = 1:2
         if tag(vps,d) == 0
